@@ -1,8 +1,7 @@
 {
-  "name": "Garage Bruno — PWA v2",
+  "name": "Garage Bruno — PWA v3",
   "short_name": "GarageBruno",
   "start_url": "./",
-  "scope": "./",
   "display": "standalone",
   "background_color": "#0f172a",
   "theme_color": "#0f172a",
