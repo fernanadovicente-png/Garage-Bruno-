@@ -1,74 +1,152 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Garage Bruno — PWA v3</title>
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#0f172a">
-<link rel="icon" href="icons/logo.png" type="image/png">
-<style>
-body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,'Helvetica Neue',Arial,'Noto Sans';background:#0b1020;color:#e5e7eb}
-header{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:10px;background:#11182c;border-bottom:1px solid #243044;position:sticky;top:0;z-index:50}
-header img{width:38px;height:38px;border-radius:8px}
-header .title{font-weight:700}
-header .muted{color:#94a3b8;font-size:12px}
-.btn,select,input{border:1px solid #243044;border-radius:10px;padding:8px 10px;background:#1e293b;color:#e5e7eb;font-weight:600}
-.btn.primary{background:linear-gradient(135deg,#2563eb,#0ea5e9);border:none}
-.btn.ok{background:#14532d;border:none}
-.btn.ghost{background:transparent;border:1px dashed #243044}
-.container{max-width:1100px;margin:0 auto;padding:16px}
-.card{background:#11182c;border:1px solid #243044;border-radius:16px;padding:16px;margin:16px 0}
-.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:12px}
-.field{display:flex;flex-direction:column;gap:6px}
-label{font-size:12px;color:#94a3b8}
-input,textarea{background:#0f1628;border:1px solid #243044;color:#e5e7eb;border-radius:10px;padding:10px;width:100%}
-textarea{min-height:60px;resize:vertical}
-table{width:100%;border-collapse:collapse;background:#0f1628;border-radius:12px;overflow:hidden}
-thead th{background:#0c1426;color:#94a3b8;font-size:12px;padding:10px;text-align:left}
-tbody td{padding:8px;border-bottom:1px solid #243044}
-tbody input{width:100%;padding:8px;background:#0e1730;border:1px solid #243044;color:#e5e7eb;border-radius:8px}
-tfoot td{padding:10px;font-weight:700}
-.totals{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
-.total-card{background:#0f1628;border:1px solid #243044;border-radius:12px;padding:12px}
-.total-card .label{font-size:12px;color:#94a3b8}
-.total-card .value{font-size:18px;font-weight:800}
-@media print{header{display:none}body{background:#fff;color:#000}input,textarea{border:none;background:#fff;color:#000}}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Garage Bruno — PWA v3.1</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0f172a">
+  <link rel="icon" href="icons/logo.png" type="image/png">
+  <style>
+    :root{--panel:#11182c;--panel2:#0f1628;--border:#243044;--muted:#94a3b8}
+    *{box-sizing:border-box}
+    html,body{margin:0;background:#0b1020;color:#e5e7eb;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,'Helvetica Neue',Arial,'Noto Sans'}
+    header{position:sticky;top:0;z-index:50;background:var(--panel);border-bottom:1px solid var(--border);padding:10px}
+    .bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+    header img{width:38px;height:38px;border-radius:8px}
+    .title{font-weight:700}
+    .muted{color:var(--muted);font-size:12px}
+    .btn,select,input{border:1px solid var(--border);border-radius:10px;padding:8px 10px;background:#1e293b;color:#e5e7eb;font-weight:600}
+    .btn.primary{background:linear-gradient(135deg,#2563eb,#0ea5e9);border:none}
+    .btn.ok{background:#14532d;border:none}
+    .btn.ghost{background:transparent;border:1px dashed var(--border)}
+    .container{max-width:1200px;margin:0 auto;padding:16px}
+    .card{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:16px;margin:16px 0}
+    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:12px}
+    .field{display:flex;flex-direction:column;gap:6px}
+    label{font-size:12px;color:var(--muted)}
+    input[type=text], input[type=number], input[type=date], textarea{background:var(--panel2);border:1px solid var(--border);color:#e5e7eb;border-radius:10px;padding:10px;width:100%}
+    textarea{min-height:60px;resize:vertical}
+    table{width:100%;border-collapse:collapse;background:var(--panel2);border-radius:12px;overflow:hidden}
+    thead th{background:#0c1426;color:var(--muted);font-size:12px;padding:10px;text-align:left}
+    tbody td{padding:8px;border-bottom:1px solid var(--border)}
+    tbody input{width:100%;padding:8px;background:#0e1730;border:1px solid var(--border);color:#e5e7eb;border-radius:8px}
+    tfoot td{padding:10px;font-weight:700}
+    .between{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+    .row-actions{display:flex;gap:6px}
+    .right{text-align:right}
+    .totals{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+    .total-card{background:var(--panel2);border:1px solid var(--border);border-radius:12px;padding:12px}
+    .total-card .label{font-size:12px;color:var(--muted)}
+    .total-card .value{font-size:18px;font-weight:800}
+    dialog#history{width:min(900px,96vw);border:1px solid var(--border);border-radius:16px;background:var(--panel);color:#e5e7eb}
+    dialog::backdrop{background:rgba(0,0,0,.6)}
+    .history-item{padding:12px;border:1px solid var(--border);border-radius:12px;background:var(--panel2);display:flex;justify-content:space-between;align-items:center;gap:12px}
+    @media print{header{display:none}body{background:#fff;color:#000}input,textarea{border:none;background:#fff;color:#000}.card,.total-card{background:#fff;border:1px solid #e5e7eb}}
+  </style>
 </head>
 <body>
-<header>
-<img src="icons/logo.png" alt="Logo">
-<div>
-<div class="title">Garage Bruno</div>
-<div class="muted">+41764712698 · b_martins91@hotmail.com</div>
-</div>
-<select id="lang" class="btn"><option value="pt">PT</option><option value="fr">FR</option></select>
-<select id="currency" class="btn"><option value="CHF">CHF</option><option value="EUR">EUR</option></select>
-<label class="muted">IVA %</label><input id="vat" type="number" step="0.1" value="7.7" style="width:70px">
-<button id="install" class="btn ghost">Instalar</button>
-<button id="history" class="btn">Histórico</button>
-<button id="new" class="btn">Novo</button>
-<button id="save" class="btn primary">Guardar</button>
-<button id="pdf" class="btn ok">Exportar PDF</button>
-</header>
-<div class="container">
-<div class="card">
-<h2>Cliente & Veículo</h2>
-<div class="grid">
-<div class="field" style="grid-column:span 6"><label>Nome do cliente</label><input id="client"></div>
-<div class="field" style="grid-column:span 3"><label>Telefone</label><input id="phone"></div>
-<div class="field" style="grid-column:span 3"><label>Data</label><input id="date" type="date"></div>
-<div class="field" style="grid-column:span 4"><label>Matrícula</label><input id="plate"></div>
-<div class="field" style="grid-column:span 4"><label>Marca</label><input id="brand"></div>
-<div class="field" style="grid-column:span 4"><label>Modelo</label><input id="model"></div>
-</div>
-</div>
-<div class="card"><h2>Serviços</h2><table><thead><tr><th>Serviço</th><th>Qtd</th><th>Preço Un.</th><th>Total</th></tr></thead><tbody id="services"></tbody></table></div>
-<div class="card"><h2>Peças</h2><table><thead><tr><th>Peça</th><th>Qtd</th><th>Preço Un.</th><th>Total</th></tr></thead><tbody id="parts"></tbody></table></div>
-</div>
-<script>
-if('serviceWorker' in navigator){navigator.serviceWorker.register('service-worker.js');}
-</script>
+  <header>
+    <div class="bar">
+      <img src="icons/logo.png" alt="Logo">
+      <div>
+        <div class="title">Garage Bruno</div>
+        <div class="muted">+41764712698 · b_martins91@hotmail.com</div>
+      </div>
+      <select id="lang" class="btn"><option value="pt" selected>PT</option><option value="fr">FR</option></select>
+      <select id="currency" class="btn"><option value="CHF" selected>CHF</option><option value="EUR">EUR</option></select>
+      <label class="muted">IVA %</label><input id="vat" type="number" step="0.1" value="7.7" style="width:80px">
+      <button id="install" class="btn ghost">Instalar</button>
+      <button id="historyBtn" class="btn">Histórico</button>
+      <button id="new" class="btn">Novo</button>
+      <button id="save" class="btn primary">Guardar</button>
+      <button id="pdf" class="btn ok">Exportar PDF</button>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="card">
+      <h2 data-i18n="clientVehicle">Cliente & Veículo</h2>
+      <div class="grid">
+        <div class="field" style="grid-column:span 6"><label data-i18n="clientName">Nome do cliente</label><input id="client" placeholder="Ex: João Silva"></div>
+        <div class="field" style="grid-column:span 3"><label data-i18n="phone">Telefone</label><input id="phone" placeholder="+41 ..."></div>
+        <div class="field" style="grid-column:span 3"><label data-i18n="date">Data</label><input id="date" type="date"></div>
+        <div class="field" style="grid-column:span 4"><label data-i18n="plate">Matrícula</label><input id="plate" placeholder="Ex: VD 123456"></div>
+        <div class="field" style="grid-column:span 4"><label data-i18n="brand">Marca</label><input id="brand" placeholder="Ex: VW"></div>
+        <div class="field" style="grid-column:span 4"><label data-i18n="model">Modelo</label><input id="model" placeholder="Ex: Golf 1.4 TSI"></div>
+        <div class="field" style="grid-column:span 12"><label data-i18n="notes">Observações</label><textarea id="notes" placeholder="Notas gerais..."></textarea></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="between">
+        <h2 data-i18n="services">Serviços</h2>
+        <div class="row-actions">
+          <button id="addService" class="btn ghost" data-i18n="addLine">+ Linha</button>
+        </div>
+      </div>
+      <div class="mt8">
+        <table id="servicesTable">
+          <thead><tr>
+            <th data-i18n="service">Serviço</th>
+            <th data-i18n="qty">Qtd</th>
+            <th data-i18n="unit">Preço Un.</th>
+            <th data-i18n="total">Total</th>
+            <th></th>
+          </tr></thead>
+          <tbody></tbody>
+          <tfoot><tr><td colspan="3" class="right" data-i18n="servicesTotal">Total Serviços</td><td id="servicesSum" class="right">0.00 CHF</td><td></td></tr></tfoot>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="between">
+        <h2 data-i18n="parts">Peças</h2>
+        <div class="row-actions">
+          <button id="addPart" class="btn ghost" data-i18n="addLine">+ Linha</button>
+        </div>
+      </div>
+      <div class="mt8">
+        <table id="partsTable">
+          <thead><tr>
+            <th data-i18n="part">Peça</th>
+            <th data-i18n="qty">Qtd</th>
+            <th data-i18n="unit">Preço Un.</th>
+            <th data-i18n="total">Total</th>
+            <th></th>
+          </tr></thead>
+          <tbody></tbody>
+          <tfoot><tr><td colspan="3" class="right" data-i18n="partsTotal">Total Peças</td><td id="partsSum" class="right">0.00 CHF</td><td></td></tr></tfoot>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2 data-i18n="labor">Mão de obra</h2>
+      <div class="grid">
+        <div class="field" style="grid-column:span 6"><label data-i18n="hours">Horas</label><input id="laborHours" type="number" step="0.1" value="0"></div>
+        <div class="field" style="grid-column:span 6"><label data-i18n="rate">Tarifa / hora</label><input id="laborRate" type="number" step="0.01" value="0"></div>
+      </div>
+      <div class="totals" style="margin-top:12px">
+        <div class="total-card"><div class="label" data-i18n="laborTotal">Total Mão de Obra</div><div id="laborTotal" class="value">0.00 CHF</div></div>
+        <div class="total-card"><div class="label">Subtotal</div><div id="subTotal" class="value">0.00 CHF</div></div>
+        <div class="total-card"><div class="label">IVA</div><div id="vatValue" class="value">0.00 CHF</div></div>
+        <div class="total-card"><div class="label" data-i18n="grandTotal">Total Global</div><div id="grandTotal" class="value">0.00 CHF</div></div>
+      </div>
+    </div>
+  </div>
+
+  <dialog id="history">
+    <form method="dialog">
+      <div class="between">
+        <h2 data-i18n="historyTitle">Histórico de intervenções</h2>
+        <button class="btn">✖</button>
+      </div>
+      <div class="mt12 history-list" id="historyList"></div>
+    </form>
+  </dialog>
+
+  <script src="script.js"></script>
 </body>
 </html>
