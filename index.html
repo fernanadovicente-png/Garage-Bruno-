@@ -3,96 +3,56 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Garage Bruno — PWA</title>
-
+  <title>Garage Bruno — PWA v2</title>
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#0f172a">
-
   <link rel="icon" href="icons/logo.png" type="image/png">
-
   <style>
-    /* Minimal reset */
     * { box-sizing: border-box; }
-    html, body { margin:0; padding:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, 'Helvetica Neue', Arial, 'Noto Sans', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'; background:#0b1020; color:#e5e7eb; }
-
+    html, body { margin:0; padding:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, 'Helvetica Neue', Arial, 'Noto Sans'; background:#0b1020; color:#e5e7eb; }
     :root{
-      --bg:#0b1020;
-      --panel:#11182c;
-      --panel-2:#0f1628;
-      --muted:#94a3b8;
-      --accent:#60a5fa;
-      --ok:#22c55e;
-      --warn:#f59e0b;
-      --danger:#ef4444;
-      --border:#243044;
-      --print-bg:#ffffff;
-      --print-fg:#000000;
+      --bg:#0b1020; --panel:#11182c; --panel-2:#0f1628; --muted:#94a3b8; --accent:#60a5fa;
+      --ok:#22c55e; --warn:#f59e0b; --danger:#ef4444; --border:#243044;
+      --print-bg:#ffffff; --print-fg:#000000;
     }
-
     .container{ max-width:1100px; margin:0 auto; padding:16px; }
-    header{
-      display:flex; align-items:center; gap:12px; padding:16px; background:var(--panel);
-      position:sticky; top:0; z-index:20; border-bottom:1px solid var(--border);
-    }
+    header{ display:flex; align-items:center; gap:12px; padding:16px; background:var(--panel); position:sticky; top:0; z-index:20; border-bottom:1px solid var(--border); }
     header img{ width:40px; height:40px; border-radius:8px; }
     header .title{ font-weight:700; letter-spacing:.3px; }
     header .muted{ color: var(--muted); font-size:12px; }
     header .grow{ flex:1 }
-    header .actions{ display:flex; gap:8px; align-items:center; }
-
+    header .actions{ display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
     .card{ background:var(--panel); border:1px solid var(--border); border-radius:16px; padding:16px; margin:16px 0; }
     .card h2{ margin:0 0 12px 0; font-size:18px; }
     .grid{ display:grid; grid-template-columns: repeat(12, 1fr); gap:12px; }
     .field{ display:flex; flex-direction:column; gap:6px; }
     label{ font-size:12px; color:var(--muted) }
-    input, select, textarea{
-      background:var(--panel-2); border:1px solid var(--border); color:#e5e7eb;
-      border-radius:10px; padding:10px; width:100%;
-      outline:none;
-    }
+    input, select, textarea{ background:var(--panel-2); border:1px solid var(--border); color:#e5e7eb; border-radius:10px; padding:10px; width:100%; outline:none; }
     textarea{ min-height:70px; resize:vertical; }
-
     table{ width:100%; border-collapse: collapse; background:var(--panel-2); border-radius:12px; overflow:hidden; }
     thead th{ text-align:left; font-size:12px; color:var(--muted); background:#0c1426; padding:10px; border-bottom:1px solid var(--border); }
     tbody td{ padding:8px; border-bottom:1px solid var(--border); }
     tbody tr:last-child td{ border-bottom:none; }
     tbody input{ width:100%; padding:8px; background:#0e1730; border:1px solid var(--border); color:#e5e7eb; border-radius:8px; }
     tfoot td{ padding:10px; font-weight:700; }
-
-    .btn{
-      appearance:none; border:none; padding:10px 14px; border-radius:12px; cursor:pointer; font-weight:600;
-      background:#1e293b; color:#e5e7eb; border:1px solid var(--border);
-    }
+    .btn{ appearance:none; border:none; padding:10px 14px; border-radius:12px; cursor:pointer; font-weight:600; background:#1e293b; color:#e5e7eb; border:1px solid var(--border); }
     .btn.primary{ background: linear-gradient(135deg, #2563eb, #0ea5e9); border:none; }
     .btn.ghost{ background:transparent; border:1px dashed var(--border); }
     .btn.ok{ background:#14532d; }
     .btn.warn{ background:#7c2d12; }
     .btn.danger{ background:#7f1d1d; }
-
-    .toolbar{ display:flex; flex-wrap:wrap; gap:8px; }
-
-    .row-actions{ display:flex; gap:6px; }
+    .between{ display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; }
     .right{ text-align:right; }
-    .flex{ display:flex; }
-    .between{ display:flex; justify-content:space-between; align-items:center; }
-    .mt8{ margin-top:8px; }
-    .mt12{ margin-top:12px; }
-    .mt16{ margin-top:16px; }
     .muted-text{ color:var(--muted) }
-
-    /* History drawer */
+    .mt8{ margin-top:8px; } .mt12{ margin-top:12px; } .mt16{ margin-top:16px; }
     dialog#history{ width:min(900px, 96vw); border:1px solid var(--border); border-radius:16px; background:var(--panel); color:#e5e7eb; }
     dialog::backdrop { background: rgba(0,0,0,.6); }
     .history-item{ padding:12px; border:1px solid var(--border); border-radius:12px; background:var(--panel-2); display:flex; gap:12px; justify-content:space-between; align-items:center; }
     .history-list{ display:grid; gap:10px; }
-
-    /* Totals panel */
     .totals{ display:grid; grid-template-columns: repeat(2,1fr); gap:12px; }
     .total-card{ padding:12px; border:1px solid var(--border); border-radius:12px; background:var(--panel-2); }
     .total-card .label{ font-size:12px; color:var(--muted); }
     .total-card .value{ font-size:20px; font-weight:800; }
-
-    /* Print styles */
     @media print {
       html, body{ background:var(--print-bg); color:var(--print-fg); }
       header, .toolbar, #history{ display:none !important; }
@@ -108,7 +68,7 @@
     <img src="icons/logo.png" alt="Logo">
     <div>
       <div class="title">Garage Bruno</div>
-      <div class="muted" id="companyContact">+41764712698 · b_martins91@hotmail.com</div>
+      <div class="muted">+41764712698 · b_martins91@hotmail.com</div>
     </div>
     <div class="grow"></div>
     <div class="actions">
@@ -116,6 +76,14 @@
         <option value="pt" selected>PT</option>
         <option value="fr">FR</option>
       </select>
+      <select id="currency" class="btn">
+        <option value="CHF" selected>CHF</option>
+        <option value="EUR">EUR</option>
+      </select>
+      <div class="between">
+        <label for="vatInput" style="font-size:12px;color:#94a3b8;">IVA %</label>
+        <input id="vatInput" type="number" step="0.1" value="7.7" style="width:90px;">
+      </div>
       <button id="installBtn" class="btn ghost" data-i18n="install">Instalar</button>
       <button id="historyBtn" class="btn" data-i18n="history">Histórico</button>
       <button id="newBtn" class="btn" data-i18n="new">Novo</button>
@@ -170,8 +138,8 @@
             <tr>
               <th data-i18n="service">Serviço</th>
               <th data-i18n="qty">Qtd</th>
-              <th data-i18n="unit">€ Un.</th>
-              <th data-i18n="total">Total (€)</th>
+              <th data-i18n="unit">Preço Un.</th>
+              <th data-i18n="total">Total</th>
               <th></th>
             </tr>
           </thead>
@@ -198,8 +166,8 @@
             <tr>
               <th data-i18n="part">Peça</th>
               <th data-i18n="qty">Qtd</th>
-              <th data-i18n="unit">€ Un.</th>
-              <th data-i18n="total">Total (€)</th>
+              <th data-i18n="unit">Preço Un.</th>
+              <th data-i18n="total">Total</th>
               <th></th>
             </tr>
           </thead>
@@ -223,18 +191,26 @@
           <input id="laborHours" type="number" step="0.1" value="0">
         </div>
         <div class="field" style="grid-column: span 6;">
-          <label data-i18n="rate">Tarifa €/hora</label>
+          <label data-i18n="rate">Tarifa / hora</label>
           <input id="laborRate" type="number" step="0.01" value="0">
         </div>
       </div>
       <div class="totals mt12">
         <div class="total-card">
           <div class="label" data-i18n="laborTotal">Total Mão de Obra</div>
-          <div id="laborTotal" class="value">0.00 €</div>
+          <div id="laborTotal" class="value">0.00</div>
+        </div>
+        <div class="total-card">
+          <div class="label">Subtotal</div>
+          <div id="subTotal" class="value">0.00</div>
+        </div>
+        <div class="total-card">
+          <div class="label">IVA</div>
+          <div id="vatValue" class="value">0.00</div>
         </div>
         <div class="total-card">
           <div class="label" data-i18n="grandTotal">Total Global</div>
-          <div id="grandTotal" class="value">0.00 €</div>
+          <div id="grandTotal" class="value">0.00</div>
         </div>
       </div>
     </div>
@@ -259,7 +235,6 @@
     </div>
   </div>
 
-  <!-- History Dialog -->
   <dialog id="history">
     <form method="dialog">
       <div class="between">
