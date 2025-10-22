@@ -1,23 +1,186 @@
-// Garage Bruno v3.1 — lógica completa
-const I18N = {
-  pt: {
-    install:"Instalar",history:"Histórico",new:"Novo",save:"Guardar",pdf:"Exportar PDF",
-    clientVehicle:"Cliente & Veículo",clientName:"Nome do cliente",phone:"Telefone",date:"Data",
-    plate:"Matrícula",brand:"Marca",model:"Modelo",notes:"Observações",services:"Serviços",
-    parts:"Peças",addLine:"+ Linha",service:"Serviço",part:"Peça",qty:"Qtd",unit:"Preço Un.",
-    total:"Total",servicesTotal:"Total Serviços",partsTotal:"Total Peças",labor:"Mão de obra",
-    hours:"Horas",rate:"Tarifa / hora",laborTotal:"Total Mão de Obra",grandTotal:"Total Global",
-    emptyName:"Insere o nome do cliente antes de guardar.",saved:"Guardado com sucesso!",
-    savedMsg:"O registo foi armazenado no histórico local.",
-    exportInfo:"Para gerar o PDF, escolhe 'Guardar como PDF' na janela de impressão."
-  },
-  fr: {
-    install:"Installer",history:"Historique",new:"Nouveau",save:"Enregistrer",pdf:"Exporter PDF",
-    clientVehicle:"Client & Véhicule",clientName:"Nom du client",phone:"Téléphone",date:"Date",
-    plate:"Plaque",brand:"Marque",model:"Modèle",notes:"Remarques",services:"Prestations",
-    parts:"Pièces",addLine:"+ Ligne",service:"Prestation",part:"Pièce",qty:"Qté",unit:"Prix U.",
-    total:"Total",servicesTotal:"Total Prestations",partsTotal:"Total Pièces",labor:"Main-d'œuvre",
-    hours:"Heures",rate:"Tarif / heure",laborTotal:"Total Main-d'œuvre",grandTotal:"Total Global",
-    emptyName:"Saisis le nom du client avant d'enregistrer.",saved:"Enregistré avec succès !",
-    savedMsg:"L’intervention a été ajoutée à l’historique local.",
-    exportInfo:"Pour génére
+/* Garage Bruno v3.1 — estilo geral */
+:root {
+  --panel: #11182c;
+  --panel2: #0f1628;
+  --border: #243044;
+  --muted: #94a3b8;
+  --accent: #60a5fa;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  background: #0b1020;
+  color: #e5e7eb;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, 'Helvetica Neue', Arial, 'Noto Sans';
+}
+
+/* ----- CABEÇALHO HORIZONTAL ----- */
+header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--panel);
+  border-bottom: 1px solid var(--border);
+  padding: 10px;
+}
+header .bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+header img {
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+}
+header .title { font-weight: 700; }
+header .muted { color: var(--muted); font-size: 12px; }
+
+/* ----- BOTÕES & INPUTS ----- */
+.btn, select, input {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 8px 10px;
+  background: #1e293b;
+  color: #e5e7eb;
+  font-weight: 600;
+}
+.btn.primary {
+  background: linear-gradient(135deg, #2563eb, #0ea5e9);
+  border: none;
+}
+.btn.ok {
+  background: #14532d;
+  border: none;
+}
+.btn.ghost {
+  background: transparent;
+  border: 1px dashed var(--border);
+}
+.btn.danger {
+  background: #7f1d1d;
+  border: none;
+}
+
+/* ----- CONTAINERS & CARTÕES ----- */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px;
+}
+.card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 16px;
+  margin: 16px 0;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 12px;
+}
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+label { font-size: 12px; color: var(--muted); }
+input[type=text], input[type=number], input[type=date], textarea {
+  background: var(--panel2);
+  border: 1px solid var(--border);
+  color: #e5e7eb;
+  border-radius: 10px;
+  padding: 10px;
+  width: 100%;
+}
+textarea {
+  min-height: 60px;
+  resize: vertical;
+}
+
+/* ----- TABELAS ----- */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--panel2);
+  border-radius: 12px;
+  overflow: hidden;
+}
+thead th {
+  background: #0c1426;
+  color: var(--muted);
+  font-size: 12px;
+  padding: 10px;
+  text-align: left;
+}
+tbody td {
+  padding: 8px;
+  border-bottom: 1px solid var(--border);
+}
+tbody input {
+  width: 100%;
+  padding: 8px;
+  background: #0e1730;
+  border: 1px solid var(--border);
+  color: #e5e7eb;
+  border-radius: 8px;
+}
+tfoot td {
+  padding: 10px;
+  font-weight: 700;
+}
+.right { text-align: right; }
+
+/* ----- TOTALIZAÇÕES ----- */
+.totals {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+.total-card {
+  background: var(--panel2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px;
+}
+.total-card .label {
+  font-size: 12px;
+  color: var(--muted);
+}
+.total-card .value {
+  font-size: 18px;
+  font-weight: 800;
+}
+
+/* ----- HISTÓRICO ----- */
+dialog#history {
+  width: min(900px, 96vw);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--panel);
+  color: #e5e7eb;
+}
+dialog::backdrop { background: rgba(0,0,0,.6); }
+.history-item {
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--panel2);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+/* ----- MODO IMPRESSÃO ----- */
+@media print {
+  header { display: none; }
+  body { background: #fff; color: #000; }
+  input, textarea { border: none; background: #fff; color: #000; }
+  .card, .total-card { background: #fff; border: 1px solid #e5e7eb; }
+  }
